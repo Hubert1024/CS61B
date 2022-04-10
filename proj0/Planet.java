@@ -25,20 +25,57 @@ public class Planet {
 		imgFileName = p.imgFileName;
 	}
 
-	/** calculation the distance  */
+	/** calculate the distance  */
 	public double calcDistance(Planet p) {
 		double xD;
 		double yD;
-		double r;
+		double r2;
 		xD = this.xxPos - p.xxPos;
 		yD = this.yyPos - p.yyPos;
-		r = xD * xD + yD * yD;
-		return Math.sqrt(r);
+		r2 = xD * xD + yD * yD;
+		return Math.sqrt(r2);
 	}
 
-	/** calc gravity */
+	/** calculate the gravity by */
 	public double calcForceExertedBy(Planet p){
 		double r = this.calcDistance(p);
 		return G * this.mass * p.mass / (r * r);
+	}
+	
+	/** calculate the force from x,y axis */
+	public double calcForceExertedByX(Planet p){
+		double xratio = (p.xxPos - this.xxPos) / this.calcDistance(p);
+		return this.calcForceExertedBy(p) * xratio;
+	}
+	public double calcForceExertedByY(Planet p){
+		double yratio = (p.yyPos - this.yyPos) / this.calcDistance(p);
+		return this.calcForceExertedBy(p) * yratio;
+	}
+
+	public double calcNetForceExertedByX(Planet[] Ps){
+		double xNetForce = 0;
+		for(int i = 0; i < Ps.length; i++){
+			if(this.equals(Ps[i])){
+				continue;
+			}
+			xNetForce += this.calcForceExertedByX(Ps[i]);
+		}
+		return xNetForce;
+	}
+	public double calcNetForceExertedByY(Planet[] Ps){
+		double yNetForce = 0;
+		for(int i = 0; i < Ps.length; i++){
+			if(this.equals(Ps[i])){
+				continue;
+			}
+			yNetForce += this.calcForceExertedByY(Ps[i]);
+		}
+		return yNetForce;
+	}
+	public boolean equals(Planet p){
+		if(this.xxPos == p.xxPos && this.yyPos == p.yyPos){
+			return true;
+		}
+		return false;
 	}
 }
