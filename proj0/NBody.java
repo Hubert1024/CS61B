@@ -49,8 +49,11 @@ public class NBody{
 		String str = "";
 		try{
 			char c = (char)br.read();
+			while(c == ' ' || c == '\n'|| c == '\r'){
+				c = (char)br.read();
+			}
 			//windows中\r和\n都能换行
-			while(c != ' '&& c != '\n' && c != '\r'){
+			while(c != ' ' && c != '\n' && c != '\r'){
 				str += c;
 				c = (char)br.read();
 			}
@@ -69,10 +72,10 @@ public class NBody{
 		String str = "";
 		try{
 			char c = (char)br.read();
-			if(c == ' '){
+			while(c == ' ' || c == '\n' || c == '\r'){
 				c = (char)br.read();
 			}
-			while(c != ' '&& c != '\n'){
+			while(c != ' ' && c != '\n' && c != '\r'){
 				str += c;
 				c = (char)br.read();
 			}
@@ -97,5 +100,31 @@ public class NBody{
 		}
 		return str;
 	}
-
+	public static void main(String[] args){
+		double T =  Double.parseDouble(args[0]);
+		double dT =  Double.parseDouble(args[1]);
+		String filename = args[2];
+		double n =0;
+		try{
+			n = readInt(new BufferedReader(new FileReader(filename)));
+		}
+		catch(Exception e1){}
+		double universRadius = readRadius(filename);
+		Planet[] planets = readPlanets(filename);
+		String Background = "./images/starfield.jpg";
+		StdDraw.setScale(-universRadius,universRadius);
+		StdDraw.enableDoubleBuffering();
+		for(double j = 0;j < T; j = j + dT){	
+			StdDraw.clear();
+			StdDraw.picture(0, 0, Background);
+			for(int i = 0;i < n; i++){
+				double fx = planets[i].calcNetForceExertedByX(planets);
+				double fy = planets[i].calcNetForceExertedByY(planets);
+				planets[i].update(dT,fx,fy);
+				planets[i].draw();
+			}
+			StdDraw.show();
+			StdDraw.pause(10);
+		}
+	}
 }
