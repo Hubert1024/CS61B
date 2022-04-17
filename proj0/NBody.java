@@ -21,8 +21,6 @@ public class NBody{
 	
 	public static Planet[] readPlanets(String fl){
 		int planetsnum = 0;
-		//double xp,yp,xv,yv,m;
-		String str = "";
 		try{
 			BufferedReader br = new BufferedReader(new FileReader(fl));
 			planetsnum = readInt(br);
@@ -36,17 +34,8 @@ public class NBody{
 			BufferedReader br = new BufferedReader(new FileReader(fl));
 			br.readLine();
 			br.readLine();
-			//double xp = readDouble(br);
 			for(int i = 0;i < planetsnum;i++){
-				//ps[i] = new Planet(0,0,0,0,0,readString(br));
 				ps[i] = new Planet(readDouble(br), readDouble(br), readDouble(br), readDouble(br), readDouble(br), readString(br));
-				//System.out.println();
-				//Double xp = Double.parseDouble("3.0e+10");
-				//yp = readDouble(br);
-				//xv = readDouble(br);
-				//yv = readDouble(br);
-				//m = readDouble(br);
-				//str = readString(br);
 			}
 			br.close();
 		}
@@ -60,7 +49,8 @@ public class NBody{
 		String str = "";
 		try{
 			char c = (char)br.read();
-			while(c != ' '&& c != '\n'){
+			//windows中\r和\n都能换行
+			while(c != ' '&& c != '\n' && c != '\r'){
 				str += c;
 				c = (char)br.read();
 			}
@@ -68,7 +58,12 @@ public class NBody{
 		catch(Exception e){
 			System.out.println("readInt");
 		}
-		return Integer.parseInt(str);
+		int n = 0;
+		if(str != null && !str.isEmpty()){
+			n = Integer.parseInt(str);	
+		}
+		return n;
+		//return Integer.parseInt(str);
 	}
 	public static Double readDouble(BufferedReader br){
 		String str = "";
@@ -90,7 +85,6 @@ public class NBody{
 			t = Double.parseDouble(str);
 		} 
 		return t;
-		//return Double.parseDouble(str);
 	}
 	public static String readString(BufferedReader br){
 		String str = "";
@@ -101,7 +95,6 @@ public class NBody{
 		while(str.charAt(0) == ' '){
 			str = str.substring(1,str.length());
 		}
-		//System.out.println(str.substring(1,str.length()));
 		return str;
 	}
 
